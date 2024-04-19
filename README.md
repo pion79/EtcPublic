@@ -1,2 +1,0 @@
-# EtcPublic
-Etc file
