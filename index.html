@@ -99,7 +99,7 @@
     <p>Shopping List</p>
     <div id="shoppingList"></div>
     <form id="orderForm">
-      <input type="text" id="orderName" maxlength="20">
+      <input type="text" iItem" maxlength="20">
       <button class="addOrder" type="submit">+</button>
     </form>
   </section>
@@ -107,11 +107,11 @@
     document.addEventListener('DOMContentLoaded', function() {
       document.querySelector('#orderForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const orderName = document.getElementById('orderName').value;
-        if (orderName.trim() !== ''){
+        const orderItem = document.getElementById('orderItem').value;
+        if (orderItem.trim() !== ''){
           const orderInput = document.createElement('div');
           orderInput.classList.add('order')
-          orderInput.textContent = orderName;
+          orderInput.textContent = orderItem;
           const cancelBtn = document.createElement('button');
           cancelBtn.classList.add('cancelBtn');
           cancelBtn.textContent = 'Cancel'
@@ -120,7 +120,7 @@
           });
           orderInput.appendChild(cancelBtn);
           document.getElementById('shoppingList').appendChild(orderInput);
-          document.getElementById('orderName').value = '';
+          document.getElementById('orderItem').value = '';
         }    
       });
     });
