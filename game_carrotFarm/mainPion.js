@@ -2,6 +2,7 @@ const timerbox = document.querySelector('.timerbox');
 const timer = document.querySelector('.timer');
 const buttonBox = document.querySelector('.button__box');
 const button = document.querySelector('.button');
+const iconButton = document.querySelector('i');
 const gameground = document.querySelector('.gameground');
 const displayCountBugKill = document.querySelector('.displaycount__bugkill')
 const audioBg = document.querySelector('#audioBg');
@@ -18,33 +19,58 @@ objectsGenerator('bug');
 
 // Button 클릭
 button.addEventListener('click', () => {
-  if (timeValue === 10) {
-    startTimer();
-    bugkills();
-    stopButton();
+  if (iconButton.classList.contains('fa-play')) {
+    console.log('play');
+    clickPlayButton();
+  } else if (iconButton.classList.contains('fa-rotate-right')) {
+    console.log('replay');
+    clickReplay();
+  } else if (iconButton.classList.contains('fa-stop')) {
+    console.log('stop');
+    restart();
   };
-  if (timeValue === 0 || countBugKill === 0) {
-    replay();
-  };
-  // if (timeValue < 10 && timeValue !== 0 ) {
-  //   clearInterval(countTime)
-  // };
   audioBg.play();
 })
 
 // Button  종류
 function stopButton () {
-  button.classList.remove('fa-solid');
-  button.innerHTML = '<i class="fa-solid fa-stop"></i>';
+  if (iconButton.classList.contains('fa-play')) {
+    iconButton.classList.remove('fa-play');
+    iconButton.classList.add('fa-stop');
+  };
+  if (iconButton.classList.contains('fa-rotate-right')) {
+    iconButton.classList.remove('fa-rotate-right');
+    iconButton.classList.add('fa-stop');
+  };
 }
 function replayButton () {
-  button.classList.remove('fa-solid');
-  button.innerHTML = '<i class="fa-solid fa-rotate-right"></i>';
+  if (iconButton.classList.contains('fa-play')) {
+    iconButton.classList.remove('fa-play');
+    iconButton.classList.add('fa-rotate-right');
+  } else if (iconButton.classList.contains('fa-stop')) {
+    iconButton.classList.remove('fa-stop');
+    iconButton.classList.add('fa-rotate-right');
+  };
 }
 
-function replay () {
-  let removeResultBox = document.querySelector('.result__box');
-  removeResultBox.remove();
+function clickPlayButton () {
+  startTimer();
+  stopButton();
+  bugkills();
+}
+
+function clickReplay () {
+  removerResultBox();
+  removerObjects();
+  resetValue();
+  objectsGenerator('carrot');
+  objectsGenerator('bug');
+  startTimer();
+  stopButton();
+  buttonBox.appendChild(button);
+}
+
+function removerObjects () {
   let carrots = document.querySelectorAll('.carrot');
   carrots.forEach(carrot => {
     carrot.remove();
@@ -53,15 +79,18 @@ function replay () {
   bugs.forEach(bug => {
     bug.remove();
   });
+}
+
+function removerResultBox () {
+  let removeResultBox = document.querySelector('.result__box');
+  removeResultBox.remove();
+}
+
+function resetValue () {
   countBugKill = 10;
   displayCountBugKill.textContent = countBugKill;
   timeValue = 10;
   timer.textContent = '00:10';
-  objectsGenerator('carrot');
-  objectsGenerator('bug');
-  startTimer();
-  stopButton();
-  buttonBox.appendChild(button);
 }
 
 function timerSetting () {
@@ -76,7 +105,6 @@ function startTimer () {
     timerSetting();
 
     if (timeValue === 0) {
-      clearInterval(countTime);
       result()
     };
   }, 1000);
@@ -122,13 +150,13 @@ function bugkills () {
 
 function generatorResultBox (paraResult) {
   const resultBox = document.createElement('div');
-  resultBox.setAttribute('class', 'result__box');
   const buttonBoxInnerResultBox = document.createElement('div');
-  buttonBoxInnerResultBox.setAttribute('class', 'buttonBoxInnerResultBox');
   const buttonText = document.createElement('span');
+  const resultText = document.createElement('p');
+  resultBox.setAttribute('class', 'result__box');
+  buttonBoxInnerResultBox.setAttribute('class', 'buttonBoxInnerResultBox');
   buttonText.setAttribute('class', 'button__text');
   buttonText.textContent = 'Replay';
-  const resultText = document.createElement('p');
   resultText.setAttribute('class', 'result__text');
   resultText.textContent = `${paraResult}`;
   replayButton();
@@ -152,3 +180,9 @@ function result (countBugKill) {
     audioYouLost.play();
   };
 };
+
+function restart () {
+  clearInterval(countTime);
+  button.remove();
+  generatorResultBox('Really?');
+}
