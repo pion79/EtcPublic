@@ -1,0 +1,110 @@
+body {
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.background__section{
+  display: block;
+  justify-content: center;
+  background-image: url('../game_carrotFarm/img/background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+}
+
+.timerbox {
+  width: 400px;
+  height: 55vh;
+  margin: auto;
+  padding-top: 80px;
+  text-align: center;
+}
+.timer {
+  background-color: rgb(244, 244, 244);
+  width: 200px;
+  margin: auto;
+  font-size: 45px;
+  font-weight: 600;
+  letter-spacing: 5px; /* 글자 간격 */
+  line-height: 1.8;  /* 행(y축)에서 글자 위치*/
+  border-radius: 10px;
+}
+
+.button__box {
+  width: 100%;
+  height: 70px;
+}
+
+.button {
+  background-color: wheat;
+  position: relative;
+  width: 60px;
+  height: 60px;
+  font-size: 30px;
+  text-align: center;
+  color: rgb(31, 31, 31);
+  border: 3px;
+  border-style: solid;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.button:hover {
+  color: rgb(235, 1, 114);
+}
+
+.displaycount__bugkill {
+  background-color: rgb(227, 145, 3);
+  width: 65px;
+  height: 65px;
+  align-content: center;
+  margin: 10px 50% 10px 50%;
+  padding: 0;
+  border: solid;
+  border-radius: 50%;
+  color: aliceblue;
+  font-size: 30px;
+  font-weight: 600;
+  transform: translate(-50%);
+}
+
+.gameground {
+  position: relative;
+  height: 40vh;
+  width: 95%;
+  padding: 10px 20px;
+  margin: auto;
+}
+
+.carrot {
+  width: 100px;
+}
+
+.bug {
+  width: 70px;
+  height: 65px;
+}
+
+.result__box {
+  background-color: rgba(61, 61, 61, 0.7);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: 320px;
+  height: 170px;
+  border-radius: 15px;
+}
+
+.result__text {
+  margin: 0;
+  font-size: 35px;
+  color: aliceblue;
+}
