@@ -123,22 +123,31 @@ function bugkills () {
 function generatorResultBox (paraResult) {
   const resultBox = document.createElement('div');
   resultBox.setAttribute('class', 'result__box');
+  const buttonBoxInnerResultBox = document.createElement('div');
+  buttonBoxInnerResultBox.setAttribute('class', 'buttonBoxInnerResultBox');
+  const buttonText = document.createElement('span');
+  buttonText.setAttribute('class', 'button__text');
+  buttonText.textContent = 'Replay';
   const resultText = document.createElement('p');
   resultText.setAttribute('class', 'result__text');
-  resultText.textContent = paraResult;
-  gameground.appendChild(resultBox);
+  resultText.textContent = `${paraResult}`;
   replayButton();
-  resultBox.appendChild(button);
+  gameground.appendChild(resultBox);
+  resultBox.appendChild(buttonBoxInnerResultBox);
+  buttonBoxInnerResultBox.appendChild(button);
+  buttonBoxInnerResultBox.appendChild(buttonText);
   resultBox.appendChild(resultText);
 }
 
 function result (countBugKill) {
   if (countBugKill === 0) {
     clearInterval(countTime);
+    button.remove();
     generatorResultBox('You Win');
     audioYouWin.play();
   } else {
     clearInterval(countTime);
+    button.remove();
     generatorResultBox('You Lost');
     audioYouLost.play();
   };

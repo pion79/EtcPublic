@@ -103,6 +103,15 @@ body {
   border-radius: 15px;
 }
 
+.buttonBoxInnerResultBox {
+  font-size: 35px;
+  margin-bottom: 10px;
+}
+
+.button__text {
+  padding-left: 10px;
+}
+
 .result__text {
   margin: 0;
   font-size: 35px;
