@@ -24,7 +24,7 @@ button.addEventListener('click', () => {
     clickPlayButton();
   } else if (iconButton.classList.contains('fa-rotate-right')) {
     console.log('replay');
-    clickReplay();
+    clickReplayButton();
   } else if (iconButton.classList.contains('fa-stop')) {
     console.log('stop');
     restart();
@@ -59,7 +59,7 @@ function clickPlayButton () {
   bugkills();
 }
 
-function clickReplay () {
+function clickReplayButton () {
   removerResultBox();
   removerObjects();
   resetValue();
