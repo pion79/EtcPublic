@@ -9,7 +9,7 @@ body {
 .background__section{
   display: block;
   justify-content: center;
-  background-image: url('../game_carrotFarm/img/background.png');
+  background-image: url('./img/background.png');
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
@@ -18,14 +18,14 @@ body {
 
 .timerbox {
   width: 400px;
-  height: 55vh;
+  height: 60vh;
   margin: auto;
-  padding-top: 80px;
+  padding-top: 5vh;
   text-align: center;
 }
-.timer {
+.game__timer {
   background-color: rgb(244, 244, 244);
-  width: 200px;
+  width: 220px;
   margin: auto;
   font-size: 45px;
   font-weight: 600;
@@ -52,9 +52,11 @@ body {
   border-radius: 10px;
   cursor: pointer;
   padding: 0;
+  transition: transform 200ms ease-in;
 }
 
 .button:hover {
+  transform: scale(1.1);
   color: rgb(235, 1, 114);
 }
 
@@ -82,15 +84,26 @@ body {
 }
 
 .carrot {
-  width: 100px;
+  width: 10vw;
+  max-width: 90px;
+  transition: transform 100ms ease-in;
+}
+
+.carrot:hover {
+  transform: scale(1.1);
 }
 
 .bug {
-  width: 70px;
-  height: 65px;
+  width: 9vw;
+  max-width: 70px;
+  transition: transform 100ms ease-in;
 }
 
-.result__box {
+.bug:hover {
+  transform: scale(1.1);
+}
+
+.game__result-box {
   background-color: rgba(61, 61, 61, 0.7);
   position: relative;
   display: flex;
@@ -98,22 +111,63 @@ body {
   justify-content: center;
   align-items: center;
   margin: auto;
-  width: 320px;
+  width: 25vw;
+  max-width: 320px;
+  min-width: 250px;
   height: 170px;
   border-radius: 15px;
+  transform: translateY(-40vh);
 }
 
-.buttonBoxInnerResultBox {
-  font-size: 35px;
-  margin-bottom: 10px;
+.result-box__hide {
+  display: none;
 }
 
-.button__text {
-  padding-left: 10px;
-}
-
-.result__text {
+.game__result-message {
   margin: 0;
   font-size: 35px;
   color: aliceblue;
+}
+
+@media screen and (max-width: 1150px) {
+  .game__timer {
+    width: 180px;
+    margin: auto;
+    font-size: 40px;
+  }
+
+  .displaycount__bugkill {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+
+  .button {
+    width: 50px;
+    height: 50px;
+    font-size: 25px;
+  }
+
+  .game__result-message {
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .game__timer {
+    width: 150px;
+    margin: auto;
+    font-size: 35px;
+  }
+
+  .displaycount__bugkill {
+    width: 58px;
+    height: 58px;
+    font-size: 26px;
+  }
+
+  .game__result-message {
+    font-size: 27px;
+  }
 }

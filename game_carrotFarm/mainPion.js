@@ -1,188 +1,173 @@
+'use strict';
+
 const timerbox = document.querySelector('.timerbox');
-const timer = document.querySelector('.timer');
+const gameTimer = document.querySelector('.game__timer');
 const buttonBox = document.querySelector('.button__box');
-const button = document.querySelector('.button');
+const buttonInTimer = document.querySelector('.button__in-timer');
+const buttonInResult = document.querySelector('.button__in-result');
 const iconButton = document.querySelector('i');
-const gameground = document.querySelector('.gameground');
 const displayCountBugKill = document.querySelector('.displaycount__bugkill')
-const audioBg = document.querySelector('#audioBg');
-const audioBugKill = document.querySelector('#audioBugKill');
-const audioCarrotSelect = document.querySelector('#audioCarrotSelect');
-const audioYouWin = document.querySelector('#audioYouWin');
-const audioYouLost = document.querySelector('#audioYouLost');
+const gameGround = document.querySelector('.gameground');
+const gameResultBox = document.querySelector('.game__result-box');
+const gameResultMessage = document.querySelector('.game__result-message')
+const audioBg = new Audio('./sound/bg.mp3');
+const audioBugKill = new Audio('./sound/bug_cut.mp3');
+const audioCarrotSelect = new Audio('./sound/carrot_pull.mp3');
+const audioYouWin = new Audio('./sound/game_win.mp3');
+const audioYouLost = new Audio('./sound/alert.wav');
 
-let countTime;
+let timerInitialize;
+let gameDurationSec = 10;
+
 let countBugKill = 10;
-let timeValue = 10;
-objectsGenerator('carrot');
-objectsGenerator('bug');
+generatorObjects('carrot');
+generatorObjects('bug');
 
-// Button 클릭
-button.addEventListener('click', () => {
+buttonInTimer.addEventListener('click', () => {
   if (iconButton.classList.contains('fa-play')) {
-    console.log('play');
-    clickPlayButton();
-  } else if (iconButton.classList.contains('fa-rotate-right')) {
-    console.log('replay');
-    clickReplayButton();
+    startGame();
   } else if (iconButton.classList.contains('fa-stop')) {
-    console.log('stop');
-    restart();
-  };
-  audioBg.play();
+    stopGame();
+  }
+})
+buttonInResult.addEventListener('click', () => {
+  replayGame();
 })
 
-// Button  종류
-function stopButton () {
-  if (iconButton.classList.contains('fa-play')) {
-    iconButton.classList.remove('fa-play');
-    iconButton.classList.add('fa-stop');
-  };
-  if (iconButton.classList.contains('fa-rotate-right')) {
-    iconButton.classList.remove('fa-rotate-right');
-    iconButton.classList.add('fa-stop');
-  };
-}
-function replayButton () {
-  if (iconButton.classList.contains('fa-play')) {
-    iconButton.classList.remove('fa-play');
-    iconButton.classList.add('fa-rotate-right');
-  } else if (iconButton.classList.contains('fa-stop')) {
-    iconButton.classList.remove('fa-stop');
-    iconButton.classList.add('fa-rotate-right');
-  };
-}
-
-function clickPlayButton () {
+function startGame () {
   startTimer();
-  stopButton();
+  ChangeButtonIcon();
   bugkills();
+  playSound(audioBg);
 }
 
-function clickReplayButton () {
-  removerResultBox();
-  removerObjects();
+function replayGame () {
+  gameGround.innerHTML = '';
+  displayGameResultBox('hidden');
+  displayButtonBox('visible');
   resetValue();
-  objectsGenerator('carrot');
-  objectsGenerator('bug');
   startTimer();
-  stopButton();
-  buttonBox.appendChild(button);
-}
-
-function removerObjects () {
-  let carrots = document.querySelectorAll('.carrot');
-  carrots.forEach(carrot => {
-    carrot.remove();
-  });
-  let bugs = document.querySelectorAll('.bug');
-  bugs.forEach(bug => {
-    bug.remove();
-  });
-}
-
-function removerResultBox () {
-  let removeResultBox = document.querySelector('.result__box');
-  removeResultBox.remove();
+  generatorObjects('carrot');
+  generatorObjects('bug');
+  playSound(audioBg);
 }
 
 function resetValue () {
   countBugKill = 10;
   displayCountBugKill.textContent = countBugKill;
-  timeValue = 10;
-  timer.textContent = '00:10';
 }
 
-function timerSetting () {
-  let minutes = Math.floor(timeValue / 60);
-  let seconds = timeValue % 60;   // 몫 > 0, 나머지 > 30
-  timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+function ChangeButtonIcon () {
+    iconButton.classList.remove('fa-play');
+    iconButton.classList.add('fa-stop');
+};
+
+function displayButtonBox (order) {
+  const orderDisplayButtonBox = order;
+  if (orderDisplayButtonBox === 'visible') {
+    buttonBox.style.visibility = 'visible';
+  } else if (orderDisplayButtonBox === 'hidden') {
+    buttonBox.style.visibility = 'hidden';
+  };
+}
+
+function timerSetting (remainingTimeSec) {
+  let minutes = Math.floor(remainingTimeSec / 60);
+  let seconds = remainingTimeSec % 60;
+  gameTimer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 function startTimer () {
-  countTime = setInterval(function() {
-    timeValue--;
-    timerSetting();
-
-    if (timeValue === 0) {
-      result()
+  let remainingTimeSec = gameDurationSec;
+  timerSetting(remainingTimeSec);
+  timerInitialize = setInterval(function() {
+    timerSetting(--remainingTimeSec);
+    if (remainingTimeSec === 0) {
+      gameResult('lost')
     };
   }, 1000);
 }
 
-function objectsGenerator(input) {
+function generatorObjects(objectName) {
+  let objects = objectName;
+  let minX = 0;
+  let minY = 0;
   for (let i = 0; i < 10; i++) {
-    let objects = input;
     objects = document.createElement('img');
-    objects.setAttribute('class', `${input}`);
-    objects.src = `/game_carrotFarm/img/${input}.png`;
-    objects.alt = `${input}${i}`;
-    objects.setAttribute('data-id', `${input}-${i}`);
-    let minX = 0;
-    let maxX = gameground.clientWidth - (objects.width + 1);
-    let minY = 0;
-    let maxY = gameground.clientHeight - (objects.height + 1);
+    objects.setAttribute('class', `${objectName}`);
+    objects.src = `./img/${objectName}.png`;
+    objects.alt = `${objectName}${i}`;
+    objects.setAttribute('data-id', `${objectName}-${i}`);
+    let maxX = gameGround.clientWidth - (objects.width + 40);
+    let maxY = gameGround.clientHeight - (objects.height + 40);
     let randomX = Math.floor(Math.random()*(maxX - minX + 1)) + minX;
     let randomY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
     objects.style.position = 'absolute';
     objects.style.left = randomX + 'px';
     objects.style.top = randomY + 'px';
-    gameground.appendChild(objects);
+    gameGround.appendChild(objects);
   }
 }
 
 function bugkills () {
-  gameground.addEventListener('click', (event) => {
-    if (timeValue !== 0 && event.target.classList.contains('bug')) {
-      event.target.remove();
-      audioBugKill.play();
+  gameGround.addEventListener('click', (event) => {
+    const target = event.target;
+    if (iconButton.classList.contains('fa-stop') && target.matches('.bug')) {
+      target.remove();
+      playSound(audioBugKill);
       countBugKill--;
       displayCountBugKill.textContent = countBugKill;
       if (countBugKill === 0 ) {
-        result(countBugKill);
+        gameResult('win');
       };
     };
-    if(timeValue !== 0 && event.target.classList.contains('carrot')) {
-      audioCarrotSelect.play()
+    if(iconButton.classList.contains('fa-stop') && target.matches('.carrot')) {
+      gameResult('lost')
+      playSound(audioCarrotSelect);
     }
   });
 };
 
-function generatorResultBox (paraResult) {
-  const resultBox = document.createElement('div');
-  const buttonBoxInnerResultBox = document.createElement('div');
-  const buttonText = document.createElement('span');
-  const resultText = document.createElement('p');
-  resultBox.setAttribute('class', 'result__box');
-  buttonBoxInnerResultBox.setAttribute('class', 'buttonBoxInnerResultBox');
-  buttonText.setAttribute('class', 'button__text');
-  buttonText.textContent = 'Replay';
-  resultText.setAttribute('class', 'result__text');
-  resultText.textContent = `${paraResult}`;
-  replayButton();
-  gameground.appendChild(resultBox);
-  resultBox.appendChild(buttonBoxInnerResultBox);
-  buttonBoxInnerResultBox.appendChild(button);
-  buttonBoxInnerResultBox.appendChild(buttonText);
-  resultBox.appendChild(resultText);
+function displayGameResultBox (selects) {
+  const select = selects;
+  if (select === 'visible') {
+    gameResultBox.classList.remove('result-box__hide');
+  } else if (select === 'hidden') {
+    gameResultBox.classList.add('result-box__hide');
+  };
 }
 
-function result (countBugKill) {
-  if (countBugKill === 0) {
-    clearInterval(countTime);
-    button.remove();
-    generatorResultBox('You Win');
-    audioYouWin.play();
+function displayGameResultMessage (pararesult) {
+  gameResultMessage.innerHTML = `${pararesult}`;
+}
+
+function gameResult (result) {
+  const results = result;
+  clearInterval(timerInitialize);
+  displayButtonBox('hidden');
+  if (results === 'win') {
+    displayGameResultMessage('You Win');
+    playSound(audioYouWin);
   } else {
-    clearInterval(countTime);
-    button.remove();
-    generatorResultBox('You Lost');
-    audioYouLost.play();
+    displayGameResultMessage('You Lost');
+    playSound(audioYouLost);
   };
+  displayGameResultBox('visible');
 };
 
-function restart () {
-  clearInterval(countTime);
-  button.remove();
-  generatorResultBox('Really?');
+function stopGame () {
+  clearInterval(timerInitialize);
+  displayButtonBox('hidden');
+  stopSound(audioBg);
+  displayGameResultMessage('Replay?');
+  displayGameResultBox('visible');
+}
+
+function playSound(sound) {
+  sound.currentTime = 0;
+  sound.play();
+}
+
+function stopSound(sound) {
+  sound.pause();
 }

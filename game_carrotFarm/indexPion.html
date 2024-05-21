@@ -13,19 +13,20 @@
   <section class="background__section">
     <div class="timerbox">
       <div class="button__box">
-        <button class="button">
+        <button class="button button__in-timer">
           <i class="fa-solid fa-play"></i>
         </button>
       </div>
-      <div class="timer">00:10</div>
+      <div class="game__timer">00:00</div>
       <div class="displaycount__bugkill">10</div>
     </div>
     <div class="gameground"></div>
   </section>
-  <audio id="audioBg" src="/game_carrotFarm/sound/bg.mp3" loop type="audio/mp3"></audio>
-  <audio id="audioBugKill" src="/game_carrotFarm/sound/bug_cut.mp3" type="audio/mp3"></audio>
-  <audio id="audioCarrotSelect" src="/game_carrotFarm/sound/carrot_pull.mp3" type="audio/mp3"></audio>
-  <audio id="audioYouWin" src="/game_carrotFarm/sound/game_win.mp3" type="audio/mp3"></audio>
-  <audio id="audioYouLost" src="/game_carrotFarm/sound/alert.wav" type="audio/wav"></audio>
+  <section class="game__result-box result-box__hide">
+    <button class="button button__in-result">
+      <i class="fa-solid fa-rotate-right"></i>
+    </button>
+    <span class="game__result-message">You have Won!!</span>
+  </section>
 </body>
 </html>
